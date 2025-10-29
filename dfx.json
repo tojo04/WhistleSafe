@@ -1,0 +1,26 @@
+{
+  "canisters": {
+    "whistle_backend": {
+      "main": "src/whistle_backend/main.mo",
+      "type": "motoko"
+    },
+    "whistle_frontend": {
+      "dependencies": [
+        "whistle_backend"
+      ],
+      "source": [
+        "src/whistle_frontend/dist"
+      ],
+      "type": "assets",
+      "workspace": "whistle_frontend"
+    }
+  },
+  "defaults": {
+    "build": {
+      "args": "",
+      "packtool": ""
+    }
+  },
+  "output_env_file": ".env",
+  "version": 1
+}
