@@ -59,7 +59,6 @@ body {
 .header-nav {
   display: flex;
   gap: 1rem;
-  align-items: center;
 }
 
 .nav-button {
@@ -77,24 +76,12 @@ body {
   background: rgba(255,255,255,0.3);
 }
 
-.nav-button.active {
-  background: rgba(255,255,255,0.4);
-  border-color: rgba(255,255,255,0.5);
-}
-
 .app-main {
   flex: 1;
-  width: 100%;
-  margin: 0;
-  padding: 0;
-}
-
-.app-main .submission-form-container,
-.app-main .success-container,
-.app-main .status-check-container {
   max-width: 900px;
+  width: 100%;
   margin: 3rem auto;
-  padding: 2.5rem 2rem;
+  padding: 0 2rem;
 }
 
 .submission-form-container,
