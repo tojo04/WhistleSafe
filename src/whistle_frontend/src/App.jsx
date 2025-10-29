@@ -1,16 +1,20 @@
 import { useState } from 'react';
-import { whistle_backend } from 'declarations/whistle_backend';
+import { verifier_registry } from 'declarations/verifier_registry';
+import { submission } from 'declarations/submission';
 
 function App() {
-  const [greeting, setGreeting] = useState('');
+  const [message, setMessage] = useState('WhistleSafe - Anonymous Whistleblower Platform');
+  const [verifierCount, setVerifierCount] = useState(null);
 
-  function handleSubmit(event) {
-    event.preventDefault();
-    const name = event.target.elements.name.value;
-    whistle_backend.greet(name).then((greeting) => {
-      setGreeting(greeting);
-    });
-    return false;
+  async function getVerifierCount() {
+    try {
+      const count = await verifier_registry.getVerifierCount();
+      setVerifierCount(Number(count));
+      setMessage(`Active Verifiers: ${count}`);
+    } catch (error) {
+      setMessage('Error fetching verifier count');
+      console.error(error);
+    }
   }
 
   return (
@@ -18,12 +22,13 @@ function App() {
       <img src="/logo2.svg" alt="DFINITY logo" />
       <br />
       <br />
-      <form action="#" onSubmit={handleSubmit}>
-        <label htmlFor="name">Enter your name: &nbsp;</label>
-        <input id="name" alt="Name" type="text" />
-        <button type="submit">Click Me!</button>
-      </form>
-      <section id="greeting">{greeting}</section>
+      <h1>🔒 WhistleSafe</h1>
+      <p>Decentralized Whistleblower Protection Platform</p>
+      <br />
+      <button onClick={getVerifierCount}>Check Verifier Count</button>
+      <section id="message">{message}</section>
+      <br />
+      <p><em>Phases 1-5 Backend Implementation Complete ✅</em></p>
     </main>
   );
 }

@@ -7,7 +7,7 @@ import Result "mo:base/Result";
 import Text "mo:base/Text";
 import Option "mo:base/Option";
 
-actor VerifierRegistry {
+persistent actor VerifierRegistry {
 
     type VerifierId = Principal;
 
@@ -24,7 +24,7 @@ actor VerifierRegistry {
     type Result<Ok, Err> = Result.Result<Ok, Err>;
 
     private stable var verifiersEntries : [(Principal, Verifier)] = [];
-    private var verifiers = HashMap.HashMap<Principal, Verifier>(
+    private transient var verifiers = HashMap.HashMap<Principal, Verifier>(
         10,
         Principal.equal,
         Principal.hash

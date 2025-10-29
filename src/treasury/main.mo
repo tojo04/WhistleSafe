@@ -6,9 +6,10 @@ import Iter "mo:base/Iter";
 import Result "mo:base/Result";
 import Text "mo:base/Text";
 import Nat "mo:base/Nat";
+import Int "mo:base/Int";
 import Option "mo:base/Option";
 
-actor Treasury {
+persistent actor Treasury {
 
     type PaymentStatus = {
         #Pending;
@@ -36,7 +37,7 @@ actor Treasury {
     private stable var controllerPrincipal : Principal = Principal.fromText("aaaaa-aa");
     private stable var authorizedCallers : [Principal] = [];
 
-    private var rewards = HashMap.HashMap<Text, Reward>(
+    private transient var rewards = HashMap.HashMap<Text, Reward>(
         100,
         Text.equal,
         Text.hash
@@ -83,7 +84,7 @@ actor Treasury {
             return #err("Unauthorized: Only controller can authorize canisters");
         };
 
-        if (not Array.find<Principal>(authorizedCallers, func (p: Principal) : Bool { Principal.equal(p, canister) }) == null) {
+        if (Option.isSome(Array.find<Principal>(authorizedCallers, func (p: Principal) : Bool { Principal.equal(p, canister) }))) {
             return #err("Canister already authorized");
         };
 

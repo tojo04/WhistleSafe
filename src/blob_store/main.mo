@@ -9,7 +9,7 @@ import Nat "mo:base/Nat";
 import Hash "mo:base/Hash";
 import Option "mo:base/Option";
 
-actor BlobStore {
+persistent actor BlobStore {
 
     type ChunkId = Nat;
     type FileId = Text;
@@ -35,26 +35,30 @@ actor BlobStore {
 
     type Result<Ok, Err> = Result.Result<Ok, Err>;
 
-    private let MAX_CHUNK_SIZE : Nat = 2_000_000;
+    private transient let MAX_CHUNK_SIZE : Nat = 2_000_000;
 
     private stable var chunkIdCounter : Nat = 0;
     private stable var chunksEntries : [(Nat, Chunk)] = [];
     private stable var filesMetadataEntries : [(Text, FileMetadata)] = [];
     private stable var fileChunksMapEntries : [(Text, [Nat])] = [];
 
-    private var chunks = HashMap.HashMap<Nat, Chunk>(
+    private func natHash(n : Nat) : Hash.Hash {
+        Text.hash(Nat.toText(n))
+    };
+
+    private transient var chunks = HashMap.HashMap<Nat, Chunk>(
         100,
         Nat.equal,
-        Hash.hash
+        natHash
     );
 
-    private var filesMetadata = HashMap.HashMap<Text, FileMetadata>(
+    private transient var filesMetadata = HashMap.HashMap<Text, FileMetadata>(
         10,
         Text.equal,
         Text.hash
     );
 
-    private var fileChunksMap = HashMap.HashMap<Text, [Nat]>(
+    private transient var fileChunksMap = HashMap.HashMap<Text, [Nat]>(
         10,
         Text.equal,
         Text.hash
@@ -71,7 +75,7 @@ actor BlobStore {
             chunksEntries.vals(),
             chunksEntries.size(),
             Nat.equal,
-            Hash.hash
+            natHash
         );
 
         filesMetadata := HashMap.fromIter<Text, FileMetadata>(

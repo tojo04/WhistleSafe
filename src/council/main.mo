@@ -8,7 +8,7 @@ import Text "mo:base/Text";
 import Nat "mo:base/Nat";
 import Option "mo:base/Option";
 
-actor Council {
+persistent actor Council {
 
     type VoteType = {
         #Approve;
@@ -45,13 +45,13 @@ actor Council {
 
     type Result<Ok, Err> = Result.Result<Ok, Err>;
 
-    private let APPROVAL_THRESHOLD : Nat = 3;
-    private let REJECTION_THRESHOLD : Nat = 3;
+    private transient let APPROVAL_THRESHOLD : Nat = 3;
+    private transient let REJECTION_THRESHOLD : Nat = 3;
 
     private stable var caseReviewsEntries : [(Text, CaseReview)] = [];
     private stable var votesEntries : [(Text, [Vote])] = [];
 
-    private var caseReviews = HashMap.HashMap<Text, CaseReview>(
+    private transient var caseReviews = HashMap.HashMap<Text, CaseReview>(
         100,
         Text.equal,
         Text.hash

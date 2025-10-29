@@ -5,10 +5,11 @@ import Iter "mo:base/Iter";
 import Result "mo:base/Result";
 import Text "mo:base/Text";
 import Nat "mo:base/Nat";
+import Int "mo:base/Int";
 import Option "mo:base/Option";
 import Principal "mo:base/Principal";
 
-actor Submission {
+persistent actor Submission {
 
     type CaseId = Text;
 
@@ -36,7 +37,7 @@ actor Submission {
     private stable var submissionsEntries : [(Text, Submission)] = [];
     private stable var caseIdCounter : Nat = 0;
 
-    private var submissions = HashMap.HashMap<Text, Submission>(
+    private transient var submissions = HashMap.HashMap<Text, Submission>(
         100,
         Text.equal,
         Text.hash
@@ -65,7 +66,7 @@ actor Submission {
     };
 
     public shared(msg) func authorizeCanister(canister: Principal) : async Result<(), Text> {
-        if (not Array.find<Principal>(authorizedCallers, func (p: Principal) : Bool { Principal.equal(p, canister) }) == null) {
+        if (Option.isSome(Array.find<Principal>(authorizedCallers, func (p: Principal) : Bool { Principal.equal(p, canister) }))) {
             return #err("Canister already authorized");
         };
 
