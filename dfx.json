@@ -1,12 +1,37 @@
 {
   "canisters": {
-    "whistle_backend": {
-      "main": "src/whistle_backend/main.mo",
+    "verifier_registry": {
+      "main": "src/verifier_registry/main.mo",
+      "type": "motoko"
+    },
+    "blob_store": {
+      "main": "src/blob_store/main.mo",
+      "type": "motoko"
+    },
+    "submission": {
+      "main": "src/submission/main.mo",
+      "type": "motoko"
+    },
+    "council": {
+      "main": "src/council/main.mo",
+      "type": "motoko",
+      "dependencies": [
+        "verifier_registry",
+        "submission",
+        "treasury"
+      ]
+    },
+    "treasury": {
+      "main": "src/treasury/main.mo",
       "type": "motoko"
     },
     "whistle_frontend": {
       "dependencies": [
-        "whistle_backend"
+        "verifier_registry",
+        "blob_store",
+        "submission",
+        "council",
+        "treasury"
       ],
       "source": [
         "src/whistle_frontend/dist"
