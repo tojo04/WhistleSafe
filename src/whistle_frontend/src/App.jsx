@@ -1,35 +1,58 @@
 import { useState } from 'react';
-import { verifier_registry } from 'declarations/verifier_registry';
-import { submission } from 'declarations/submission';
+import SubmissionForm from './components/SubmissionForm';
 
 function App() {
-  const [message, setMessage] = useState('WhistleSafe - Anonymous Whistleblower Platform');
-  const [verifierCount, setVerifierCount] = useState(null);
-
-  async function getVerifierCount() {
-    try {
-      const count = await verifier_registry.getVerifierCount();
-      setVerifierCount(Number(count));
-      setMessage(`Active Verifiers: ${count}`);
-    } catch (error) {
-      setMessage('Error fetching verifier count');
-      console.error(error);
-    }
-  }
+  const [showStatus, setShowStatus] = useState(false);
 
   return (
-    <main>
-      <img src="/logo2.svg" alt="DFINITY logo" />
-      <br />
-      <br />
-      <h1>🔒 WhistleSafe</h1>
-      <p>Decentralized Whistleblower Protection Platform</p>
-      <br />
-      <button onClick={getVerifierCount}>Check Verifier Count</button>
-      <section id="message">{message}</section>
-      <br />
-      <p><em>Phases 1-5 Backend Implementation Complete ✅</em></p>
-    </main>
+    <div className="app">
+      <header className="app-header">
+        <div className="header-content">
+          <div className="logo-section">
+            <img src="/logo2.svg" alt="WhistleSafe" className="logo" />
+            <div>
+              <h1>WhistleSafe</h1>
+              <p className="tagline">Decentralized Whistleblower Protection Platform</p>
+            </div>
+          </div>
+          <nav className="header-nav">
+            <button
+              className="nav-button"
+              onClick={() => setShowStatus(!showStatus)}
+            >
+              {showStatus ? 'Submit Report' : 'Check Status'}
+            </button>
+          </nav>
+        </div>
+      </header>
+
+      <main className="app-main">
+        {!showStatus ? (
+          <SubmissionForm />
+        ) : (
+          <div className="status-check-container">
+            <h2>Check Submission Status</h2>
+            <p>Enter your Case ID to check the status of your submission</p>
+            <input
+              type="text"
+              placeholder="Enter Case ID"
+              className="status-input"
+            />
+            <button className="primary-button">Check Status</button>
+            <p className="status-note">
+              Status tracking coming soon. Your Case ID will allow you to monitor the review process.
+            </p>
+          </div>
+        )}
+      </main>
+
+      <footer className="app-footer">
+        <p>Built on the Internet Computer Protocol</p>
+        <p className="footer-note">
+          100% anonymous • Client-side encryption • Tamper-proof blockchain storage
+        </p>
+      </footer>
+    </div>
   );
 }
 
